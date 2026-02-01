@@ -39,4 +39,283 @@
             height: 100%;
             background: #8b0000; /* Deep Red */
             background-image: repeating-linear-gradient(90deg, #8b0000, #600000 10px, #8b0000 20px);
-            box-shadow: inset -10px 0 3
+            box-shadow: inset -10px 0 30px rgba(0,0,0,0.6);
+            transition: transform 1.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .curtain-left { left: 0; transform-origin: left; }
+        .curtain-right { right: 0; transform-origin: right; }
+
+        /* Curtain Open State */
+        .curtain-open .curtain-left { transform: translateX(-100%); }
+        .curtain-open .curtain-right { transform: translateX(100%); }
+        .curtain-open { pointer-events: none; }
+
+        /* Enter Button */
+        #enter-btn {
+            position: relative;
+            z-index: 10;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: opacity 0.5s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+        
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Pinyon Script', cursive; /* UPDATED FONT */
+            font-size: 5.5rem; /* Increased size for the new font */
+            color: #8b0000;
+            margin: 15px 0;
+            line-height: 1.1;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.15);
+            font-weight: 400;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        /* --- DATE CIRCLES --- */
+        .date-section {
+            margin: 50px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .date-circle {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #d4af37; /* Gold */
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2); /* Gold Glow */
+        }
+
+        .date-circle span.num { font-size: 1.8rem; font-weight: 700; color: #8b0000; line-height: 1; }
+        .date-circle span.text { font-size: 0.8rem; text-transform: uppercase; color: #d4af37; margin-top: 2px; }
+
+        /* --- COUNTDOWN --- */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 15px;
+        }
+        .time-box { min-width: 60px; }
+        .time-val { font-size: 1.8rem; font-weight: bold; color: #333; display: block; }
+        .time-label { font-size: 0.7rem; text-transform: uppercase; color: #888; letter-spacing: 1px; }
+
+        /* --- VENUE CARD --- */
+        .venue-card {
+            background: #fff;
+            padding: 40px 20px;
+            border: 1px solid #e0e0e0;
+            border-top: 5px solid #d4af37;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .venue-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #8b0000;
+            margin: 10px 0 5px 0;
+        }
+
+        .venue-address {
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Map Embed */
+        .map-frame {
+            width: 100%;
+            height: 300px;
+            border: 0;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .btn-map {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background-color: #8b0000;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-map:hover { background-color: #600000; }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 60px;
+            padding-bottom: 40px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Mobile adjustment */
+        @media (max-width: 400px) {
+            h1 { font-size: 4rem; } /* Slightly smaller on tiny screens but still big */
+            .date-circle { width: 80px; height: 80px; }
+            .date-circle span.num { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="curtain-overlay">
+        <div class="curtain-panel curtain-left"></div>
+        <div class="curtain-panel curtain-right"></div>
+        <button id="enter-btn">Tap to Open</button>
+    </div>
+
+    <div class="container" id="content">
+        <div class="subtitle">Together with their families</div>
+        <h1>Aneesh <br>&<br> Siddhi</h1>
+        <div class="subtitle">Invite you to celebrate their wedding</div>
+
+        <div class="date-section">
+            <div class="date-circle">
+                <span class="num">20</span>
+                <span class="text">Feb</span>
+            </div>
+            <div class="date-circle">
+                <span class="num">2026</span>
+                <span class="text">Year</span>
+            </div>
+            <div class="date-circle" style="border-color: #8b0000;">
+                <span class="num" style="color: #d4af37;">12:26</span>
+                <span class="text" style="color: #8b0000;">PM</span>
+            </div>
+        </div>
+
+        <p style="font-size: 1.3rem; margin-top: 30px; font-style: italic;">
+            "We can't wait to celebrate with you!"
+        </p>
+
+        <div class="countdown">
+            <div class="time-box"><span class="time-val" id="days">00</span><span class="time-label">Days</span></div>
+            <div class="time-box"><span class="time-val" id="hours">00</span><span class="time-label">Hours</span></div>
+            <div class="time-box"><span class="time-val" id="mins">00</span><span class="time-label">Mins</span></div>
+            <div class="time-box"><span class="time-val" id="secs">00</span><span class="time-label">Secs</span></div>
+        </div>
+
+        <div class="venue-card">
+            <p style="letter-spacing: 2px; font-size: 0.8rem; font-weight: bold;">THE CEREMONY</p>
+            <div class="venue-name">Vinkar Sabha Gruha</div>
+            <div class="venue-address">FVF3+P9 Pune, Maharashtra</div>
+
+            <iframe 
+                class="map-frame"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.395726887569!2d73.8475513!3d18.5110543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0791d293f3d%3A0x6b5b5c5e8b5b5c5e!2sVinkar%20Sabha%20Gruha!5e0!3m2!1sen!2sin!4v1675345678901!5m2!1sen!2sin" 
+                allowfullscreen>
+            </iframe>
+
+            <a href="https://www.google.com/maps/search/?api=1&query=Vinkar+Sabha+Gruha+Pune" target="_blank" class="btn-map">
+                Get Directions
+            </a>
+        </div>
+
+        <footer>
+            Created with love for Aneesh & Siddhi
+        </footer>
+    </div>
+
+    <script>
+        // 1. CURTAIN LOGIC
+        const enterBtn = document.getElementById('enter-btn');
+        const overlay = document.getElementById('curtain-overlay');
+        const content = document.getElementById('content');
+
+        enterBtn.addEventListener('click', () => {
+            // Animate Curtain
+            overlay.classList.add('curtain-open');
+            enterBtn.style.opacity = '0';
+            
+            // Show Content
+            setTimeout(() => {
+                content.classList.add('visible');
+            }, 800);
+
+            // Remove overlay from DOM interaction after animation
+            setTimeout(() => {
+                overlay.style.visibility = 'hidden';
+            }, 2500);
+        });
+
+        // 2. COUNTDOWN LOGIC (Target: Feb 20, 2026 12:26:00)
+        const countDownDate = new Date("Feb 20, 2026 12:26:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("mins").innerText = minutes;
+            document.getElementById("secs").innerText = seconds;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector('.countdown').innerHTML = "<div style='width:100%; font-size:1.5rem; color:#8b0000;'>Happily Married! ❤️</div>";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
