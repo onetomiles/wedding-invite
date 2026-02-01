@@ -108,3 +108,273 @@
             isolation: isolate; 
         }
         .scratch-reveal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8b0000;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            background: white;
+            z-index: 1; /* Behind canvas */
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            z-index: 2; /* On top */
+            cursor: pointer;
+            touch-action: none; /* Critical for mobile */
+        }
+
+        /* COUNTDOWN */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+        .time-box {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-width: 60px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .time-val { font-size: 1.5rem; font-weight: bold; display: block; color: #333; }
+        .time-label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
+
+        /* VENUE & MAP */
+        .venue-section {
+            margin-top: 50px;
+            padding: 30px;
+            border: 1px solid #d4af37;
+            position: relative;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .venue-section::before {
+            content: "❦";
+            font-size: 2rem;
+            background: white;
+            padding: 0 10px;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #d4af37;
+        }
+        .venue-name { font-weight: bold; font-size: 1.5rem; margin-bottom: 5px; color: #8b0000; }
+        
+        /* Map Styles */
+        .map-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+            width: 100%;
+        }
+        .map-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #d4af37;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        footer { margin-top: 50px; padding-bottom: 20px; font-size: 0.8rem; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div id="curtain-overlay">
+        <div class="curtain-panel curtain-left"></div>
+        <div class="curtain-panel curtain-right"></div>
+        <div id="enter-btn">Tap to Open</div>
+    </div>
+
+    <div class="container" id="main-content">
+        <p class="subtitle">You are cordially invited to the wedding of</p>
+        <h1>Aneesh <br>&<br> Siddhi</h1>
+        
+        <div class="scratch-section">
+            <p class="scratch-instruction">✨ Scratch circles to reveal the date ✨</p>
+            <div class="scratch-container">
+                <div class="scratch-box">
+                    <div class="scratch-reveal">20</div>
+                    <canvas id="scratch1" width="100" height="100"></canvas>
+                </div>
+                <div class="scratch-box">
+                    <div class="scratch-reveal">Feb</div>
+                    <canvas id="scratch2" width="100" height="100"></canvas>
+                </div>
+                <div class="scratch-box">
+                    <div class="scratch-reveal">2026</div>
+                    <canvas id="scratch3" width="100" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <p style="font-size: 1.2rem; margin-top: 20px;">We're getting married!</p>
+
+        <div class="countdown">
+            <div class="time-box"><span class="time-val" id="days">00</span><span class="time-label">Days</span></div>
+            <div class="time-box"><span class="time-val" id="hours">00</span><span class="time-label">Hours</span></div>
+            <div class="time-box"><span class="time-val" id="mins">00</span><span class="time-label">Mins</span></div>
+            <div class="time-box"><span class="time-val" id="secs">00</span><span class="time-label">Secs</span></div>
+        </div>
+
+        <div class="venue-section">
+            <p>THE CELEBRATION WILL TAKE PLACE AT</p>
+            <div class="venue-name">Vinkar Sabha Gruha</div>
+            <p>FVF3+P9 Pune, Maharashtra</p>
+            <p><strong>February 20, 2026 | 12:26 PM</strong></p>
+
+            <div class="map-container">
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    marginheight="0" 
+                    marginwidth="0" 
+                    src="https://maps.google.com/maps?q=FVF3+P9+Pune,+Maharashtra&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                </iframe>
+            </div>
+
+            <a href="https://www.google.com/maps/search/?api=1&query=FVF3+P9+Pune,+Maharashtra" target="_blank" class="map-btn">
+                📍 Open in Google Maps
+            </a>
+        </div>
+
+        <footer>
+            With Love, Aneesh & Siddhi
+        </footer>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+
+        // 1. Curtain Logic
+        const curtainOverlay = document.getElementById('curtain-overlay');
+        const enterBtn = document.getElementById('enter-btn');
+        const mainContent = document.getElementById('main-content');
+
+        enterBtn.addEventListener('click', () => {
+            curtainOverlay.classList.add('curtain-open');
+            enterBtn.style.opacity = '0';
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+            }, 800);
+        });
+
+        // 2. IMPROVED Scratch Card Logic
+        function initScratch(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+
+            // Set canvas size matching display size for clarity
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            // Fill with gold color initially
+            ctx.fillStyle = "#d4af37"; 
+            ctx.beginPath();
+            ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add text hint "?"
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 30px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("?", canvas.width/2, canvas.height/2);
+
+            let isDrawing = false;
+
+            function scratch(x, y) {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                // Increased brush size for easier scratching
+                ctx.arc(x, y, 20, 0, Math.PI * 2); 
+                ctx.fill();
+            }
+
+            // Mouse Events
+            canvas.addEventListener('mousedown', (e) => { isDrawing = true; });
+            canvas.addEventListener('mouseup', (e) => { isDrawing = false; });
+            canvas.addEventListener('mouseleave', (e) => { isDrawing = false; });
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                scratch(e.clientX - rect.left, e.clientY - rect.top);
+            });
+
+            // Touch Events (Mobile) - Fixed for scrolling issues
+            canvas.addEventListener('touchstart', (e) => { 
+                isDrawing = true; 
+                e.preventDefault(); // Stop page scrolling
+            }, {passive: false});
+            
+            canvas.addEventListener('touchend', (e) => { isDrawing = false; });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                if (!isDrawing) return;
+                e.preventDefault(); // Stop page scrolling
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                scratch(touch.clientX - rect.left, touch.clientY - rect.top);
+            }, {passive: false});
+        }
+
+        // Initialize scratch cards when content becomes visible to ensure sizing
+        // (Wait slightly for CSS layout)
+        setTimeout(() => {
+            initScratch('scratch1');
+            initScratch('scratch2');
+            initScratch('scratch3');
+        }, 100);
+
+
+        // 3. Countdown Logic - Updated Date
+        // Month is 0-indexed in JS? No, Date string "Feb 20" works fine.
+        const countDownDate = new Date("Feb 20, 2026 12:26:00").getTime();
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("mins").innerText = minutes;
+            document.getElementById("secs").innerText = seconds;
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.querySelector('.countdown').innerHTML = "<div style='font-size:1.5rem; color:#8b0000;'>Happily Married!</div>";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
