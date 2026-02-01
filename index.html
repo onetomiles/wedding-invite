@@ -2,278 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aneesh & Siddhi's Wedding</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS STYLES --- */
+        /* --- GLOBAL STYLES --- */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             font-family: 'Playfair Display', serif;
-            background-color: #f9f4ef;
-            overflow-x: hidden;
-            text-align: center;
+            background-color: #f9f4ef; /* Cream */
             color: #4a4a4a;
+            scroll-behavior: smooth;
         }
 
-        /* CURTAIN STYLES */
+        /* --- CURTAIN OVERLAY --- */
         #curtain-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2000;
-            display: flex;
-            pointer-events: auto;
-            transition: opacity 1s ease 1s;
-        }
-        
-        .curtain-panel {
-            width: 50%;
-            height: 100%;
-            background: #8b0000;
-            position: relative;
-            transition: transform 1.5s ease-in-out;
-            background-image: repeating-linear-gradient(90deg, #8b0000, #720000 10px, #8b0000 20px);
-            box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
-        }
-
-        .curtain-left { transform-origin: left; }
-        .curtain-right { transform-origin: right; }
-
-        .curtain-open .curtain-left { transform: translateX(-100%); }
-        .curtain-open .curtain-right { transform: translateX(100%); }
-        .curtain-open { pointer-events: none; }
-
-        #enter-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2001;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.5s;
-        }
-
-        /* MAIN CONTENT */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            opacity: 0;
-            transition: opacity 2s ease 1s;
-        }
-        
-        .visible { opacity: 1; }
-
-        h1 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 4rem;
-            color: #8b0000;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-        }
-
-        /* DATE CIRCLES (Formerly Scratchers) */
-        .date-section { margin: 40px 0; }
-        .date-instruction { font-style: italic; color: #888; margin-bottom: 20px; }
-        .circles-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .date-circle {
-            width: 100px;
-            height: 100px;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #8b0000;
-            border: 2px solid #d4af37; /* Gold Border */
-            border-radius: 50%;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: opacity 1s ease 1s, visibility 0s linear 2s;
         }
-
-        /* COUNTDOWN */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 40px 0;
-        }
-        .time-box {
-            background: #fff;
-            padding: 10px;
-            border: 1px solid #ddd;
-            min-width: 60px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .time-val { font-size: 1.5rem; font-weight: bold; display: block; color: #333; }
-        .time-label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
-
-        /* VENUE & MAP */
-        .venue-section {
-            margin-top: 50px;
-            padding: 30px;
-            border: 1px solid #d4af37;
-            position: relative;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .venue-section::before {
-            content: "❦";
-            font-size: 2rem;
-            background: white;
-            padding: 0 10px;
+        
+        .curtain-panel {
             position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #d4af37;
-        }
-        .venue-name { font-weight: bold; font-size: 1.5rem; margin-bottom: 5px; color: #8b0000; }
-        
-        .map-container {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            height: 250px;
-            width: 100%;
-        }
-        .map-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #d4af37;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        footer { margin-top: 50px; padding-bottom: 20px; font-size: 0.8rem; color: #888; }
-    </style>
-</head>
-<body>
-
-    <div id="curtain-overlay">
-        <div class="curtain-panel curtain-left"></div>
-        <div class="curtain-panel curtain-right"></div>
-        <div id="enter-btn">Tap to Open</div>
-    </div>
-
-    <div class="container" id="main-content">
-        <p class="subtitle">You are cordially invited to the wedding of</p>
-        <h1>Aneesh <br>&<br> Siddhi</h1>
-        
-        <div class="date-section">
-            <p class="date-instruction">Save The Date</p>
-            <div class="circles-container">
-                <div class="date-circle">20</div>
-                <div class="date-circle">Feb</div>
-                <div class="date-circle">2026</div>
-            </div>
-        </div>
-
-        <p style="font-size: 1.2rem; margin-top: 20px;">We're getting married!</p>
-
-        <div class="countdown">
-            <div class="time-box"><span class="time-val" id="days">00</span><span class="time-label">Days</span></div>
-            <div class="time-box"><span class="time-val" id="hours">00</span><span class="time-label">Hours</span></div>
-            <div class="time-box"><span class="time-val" id="mins">00</span><span class="time-label">Mins</span></div>
-            <div class="time-box"><span class="time-val" id="secs">00</span><span class="time-label">Secs</span></div>
-        </div>
-
-        <div class="venue-section">
-            <p>THE CELEBRATION WILL TAKE PLACE AT</p>
-            <div class="venue-name">Vinkar Sabha Gruha</div>
-            <p>FVF3+P9 Pune, Maharashtra</p>
-            <p><strong>February 20, 2026 | 12:26 PM</strong></p>
-
-            <div class="map-container">
-                <iframe 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    marginheight="0" 
-                    marginwidth="0" 
-                    src="https://maps.google.com/maps?q=Vinkar+Sabha+Gruha+Pune&output=embed">
-                </iframe>
-            </div>
-
-            <a href="https://www.google.com/maps/search/?api=1&query=Vinkar+Sabha+Gruha+Pune" target="_blank" class="map-btn">
-                📍 Open in Google Maps
-            </a>
-        </div>
-
-        <footer>
-            With Love, Aneesh & Siddhi
-        </footer>
-    </div>
-
-    <script>
-        /* --- LOGIC --- */
-
-        // 1. Curtain Logic
-        const curtainOverlay = document.getElementById('curtain-overlay');
-        const enterBtn = document.getElementById('enter-btn');
-        const mainContent = document.getElementById('main-content');
-        
-        enterBtn.addEventListener('click', () => {
-            curtainOverlay.classList.add('curtain-open');
-            enterBtn.style.opacity = '0';
-            setTimeout(() => {
-                mainContent.classList.add('visible');
-            }, 800);
-        });
-
-        // 2. COUNTDOWN LOGIC
-        const countDownDate = new Date("Feb 20, 2026 12:26:00").getTime();
-
-        const x = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
-            document.getElementById("mins").innerText = minutes;
-            document.getElementById("secs").innerText = seconds;
-
-            if (distance < 0) {
-                clearInterval(x);
-                document.querySelector('.countdown').innerHTML = "<div style='font-size:1.5rem; color:#8b0000;'>Happily Married!</div>";
-            }
-        }, 1000);
-    </script>
-</body>
-</html>
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: #8b0000; /* Deep Red */
+            background-image: repeating-linear-gradient(90deg, #
