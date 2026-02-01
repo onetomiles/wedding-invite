@@ -50,4 +50,393 @@
         .curtain-open { pointer-events: none; }
 
         #enter-btn {
-            position: absolute
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2001;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.5s;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            opacity: 0;
+            transition: opacity 2s ease 1s;
+        }
+        
+        .visible { opacity: 1; }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: #8b0000;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* SCRATCH CARD FIXED */
+        .scratch-section { margin: 40px 0; }
+        .scratch-instruction { font-style: italic; color: #888; margin-bottom: 20px; }
+        .scratch-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            /* Prevent touch actions on the container to stop scrolling while scratching */
+            touch-action: none; 
+        }
+        .scratch-box {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .scratch-reveal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8b0000;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            background: white;
+            z-index: 1; 
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px; /* Fixed Width */
+            height: 100px; /* Fixed Height */
+            border-radius: 50%;
+            z-index: 2; 
+            cursor: pointer;
+            transition: opacity 0.5s ease;
+        }
+        .canvas-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* HIDDEN SECTIONS (Reveal after scratch) */
+        #hidden-details {
+            opacity: 0.3; /* Dimmed initially */
+            filter: blur(5px);
+            transition: all 1.5s ease;
+        }
+        #hidden-details.revealed {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        /* COUNTDOWN */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+        .time-box {
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-width: 60px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .time-val { font-size: 1.5rem; font-weight: bold; display: block; color: #333; }
+        .time-label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
+
+        /* VENUE & MAP */
+        .venue-section {
+            margin-top: 50px;
+            padding: 30px;
+            border: 1px solid #d4af37;
+            position: relative;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .venue-section::before {
+            content: "❦";
+            font-size: 2rem;
+            background: white;
+            padding: 0 10px;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #d4af37;
+        }
+        .venue-name { font-weight: bold; font-size: 1.5rem; margin-bottom: 5px; color: #8b0000; }
+        
+        .map-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+            width: 100%;
+        }
+        .map-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #d4af37;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        footer { margin-top: 50px; padding-bottom: 20px; font-size: 0.8rem; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div id="curtain-overlay">
+        <div class="curtain-panel curtain-left"></div>
+        <div class="curtain-panel curtain-right"></div>
+        <div id="enter-btn">Tap to Open</div>
+    </div>
+
+    <div class="container" id="main-content">
+        <p class="subtitle">You are cordially invited to the wedding of</p>
+        <h1>Aneesh <br>&<br> Siddhi</h1>
+        
+        <div class="scratch-section">
+            <p class="scratch-instruction">✨ Scratch circles to reveal the date ✨</p>
+            <div class="scratch-container">
+                <div class="scratch-box">
+                    <div class="scratch-reveal">20</div>
+                    <canvas id="scratch1" width="100" height="100"></canvas>
+                </div>
+                <div class="scratch-box">
+                    <div class="scratch-reveal">Feb</div>
+                    <canvas id="scratch2" width="100" height="100"></canvas>
+                </div>
+                <div class="scratch-box">
+                    <div class="scratch-reveal">2026</div>
+                    <canvas id="scratch3" width="100" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <p style="font-size: 1.2rem; margin-top: 20px;">We're getting married!</p>
+
+        <div id="hidden-details">
+            <div class="countdown" id="countdown-anchor">
+                <div class="time-box"><span class="time-val" id="days">00</span><span class="time-label">Days</span></div>
+                <div class="time-box"><span class="time-val" id="hours">00</span><span class="time-label">Hours</span></div>
+                <div class="time-box"><span class="time-val" id="mins">00</span><span class="time-label">Mins</span></div>
+                <div class="time-box"><span class="time-val" id="secs">00</span><span class="time-label">Secs</span></div>
+            </div>
+
+            <div class="venue-section">
+                <p>THE CELEBRATION WILL TAKE PLACE AT</p>
+                <div class="venue-name">Vinkar Sabha Gruha</div>
+                <p>FVF3+P9 Pune, Maharashtra</p>
+                <p><strong>February 20, 2026 | 12:26 PM</strong></p>
+
+                <div class="map-container">
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        frameborder="0" 
+                        scrolling="no" 
+                        marginheight="0" 
+                        marginwidth="0" 
+                        src="https://maps.google.com/maps?q=Vinkar+Sabha+Gruha+Pune&t=&z=13&ie=UTF8&iwloc=&output=embed">
+                    </iframe>
+                </div>
+
+                <a href="https://www.google.com/maps/search/?api=1&query=Vinkar+Sabha+Gruha+Pune" target="_blank" class="map-btn">
+                    📍 Open in Google Maps
+                </a>
+            </div>
+
+            <footer>
+                With Love, Aneesh & Siddhi
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        /* --- LOGIC --- */
+
+        // 1. Curtain Logic
+        const curtainOverlay = document.getElementById('curtain-overlay');
+        const enterBtn = document.getElementById('enter-btn');
+        const mainContent = document.getElementById('main-content');
+        
+        enterBtn.addEventListener('click', () => {
+            curtainOverlay.classList.add('curtain-open');
+            enterBtn.style.opacity = '0';
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+            }, 800);
+        });
+
+        // 2. SCRATCH CARD LOGIC (Robust Mobile Fix)
+        let scratchCount = 0; // Tracks how many cards are revealed
+        const totalCards = 3;
+
+        function initScratch(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            
+            // Hardcode 100x100 to match CSS
+            canvas.width = 100;
+            canvas.height = 100;
+            
+            // Fill Gold
+            ctx.fillStyle = "#d4af37"; 
+            ctx.beginPath();
+            ctx.arc(50, 50, 50, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Text "?"
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 30px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("?", 50, 50);
+
+            let isDrawing = false;
+            let revealed = false;
+
+            // Universal Input Handler
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                let clientX, clientY;
+                
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+
+            function scratch(e) {
+                if (!isDrawing || revealed) return;
+                
+                // Prevent scrolling on mobile while scratching
+                if(e.type === 'touchmove') e.preventDefault();
+
+                const pos = getPos(e);
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 15, 0, Math.PI * 2); // Brush Size
+                ctx.fill();
+            }
+
+            function checkReveal() {
+                if (revealed) return;
+                
+                // Check pixels to see if enough is scratched
+                const imageData = ctx.getImageData(0, 0, 100, 100);
+                const pixels = imageData.data;
+                let transparentPixels = 0;
+                
+                // Optimization: Check every 4th pixel
+                for (let i = 3; i < pixels.length; i += 16) { 
+                    if (pixels[i] === 0) transparentPixels++;
+                }
+
+                // If > 40% scratched, auto-reveal
+                if (transparentPixels > (2500 * 0.40)) { // 2500 is roughly total points checked
+                    revealed = true;
+                    canvas.classList.add('canvas-hidden'); // Fade out CSS
+                    scratchCount++;
+                    checkAllRevealed();
+                }
+            }
+
+            // Events
+            canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', () => { isDrawing = false; checkReveal(); });
+            canvas.addEventListener('mouseleave', () => { isDrawing = false; });
+
+            // Touch Events (Passive: false is critical for Android)
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, {passive: false});
+            canvas.addEventListener('touchmove', (e) => { scratch(e); }, {passive: false});
+            canvas.addEventListener('touchend', () => { isDrawing = false; checkReveal(); });
+        }
+
+        function checkAllRevealed() {
+            if (scratchCount === totalCards) {
+                // Reveal Details
+                const details = document.getElementById('hidden-details');
+                details.classList.add('revealed');
+
+                // Auto Scroll Down
+                setTimeout(() => {
+                    document.getElementById('countdown-anchor').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }, 600);
+            }
+        }
+
+        // Initialize
+        initScratch('scratch1');
+        initScratch('scratch2');
+        initScratch('scratch3');
+
+
+        // 3. COUNTDOWN LOGIC
+        const countDownDate = new Date("Feb 20, 2026 12:26:00").getTime();
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("mins").innerText = minutes;
+            document.getElementById("secs").innerText = seconds;
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.querySelector('.countdown').innerHTML = "<div style='font-size:1.5rem; color:#8b0000;'>Happily Married!</div>";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
