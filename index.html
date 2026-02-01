@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aneesh & Siddhi's Wedding</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +13,7 @@
             width: 100%;
             height: 100%;
             font-family: 'Playfair Display', serif;
-            background-color: #f9f4ef; /* Cream background */
+            background-color: #f9f4ef;
             overflow-x: hidden;
             text-align: center;
             color: #4a4a4a;
@@ -29,13 +29,13 @@
             z-index: 1000;
             display: flex;
             pointer-events: auto;
-            transition: opacity 1s ease 1s; /* Fade out after opening */
+            transition: opacity 1s ease 1s;
         }
         
         .curtain-panel {
             width: 50%;
             height: 100%;
-            background: #8b0000; /* Deep Red */
+            background: #8b0000;
             position: relative;
             transition: transform 1.5s ease-in-out;
             background-image: repeating-linear-gradient(90deg, #8b0000, #720000 10px, #8b0000 20px);
@@ -45,7 +45,6 @@
         .curtain-left { transform-origin: left; }
         .curtain-right { transform-origin: right; }
 
-        /* Open state for curtains */
         .curtain-open .curtain-left { transform: translateX(-100%); }
         .curtain-open .curtain-right { transform: translateX(100%); }
         .curtain-open { pointer-events: none; }
@@ -72,7 +71,7 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 40px 20px;
-            opacity: 0; /* Hidden initially */
+            opacity: 0;
             transition: opacity 2s ease 1s;
         }
         
@@ -93,15 +92,9 @@
             text-transform: uppercase;
         }
 
-        /* SCRATCH CARD SECTION */
-        .scratch-section {
-            margin: 40px 0;
-        }
-        .scratch-instruction {
-            font-style: italic;
-            color: #888;
-            margin-bottom: 20px;
-        }
+        /* SCRATCH CARD IMPROVED */
+        .scratch-section { margin: 40px 0; }
+        .scratch-instruction { font-style: italic; color: #888; margin-bottom: 20px; }
         .scratch-container {
             display: flex;
             justify-content: center;
@@ -111,232 +104,7 @@
             position: relative;
             width: 100px;
             height: 100px;
+            /* Ensures proper stacking context */
+            isolation: isolate; 
         }
         .scratch-reveal {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #8b0000;
-            border: 2px solid #d4af37; /* Gold border */
-            border-radius: 50%;
-            background: white;
-            z-index: 1;
-        }
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            z-index: 2;
-            cursor: pointer;
-            touch-action: none;
-        }
-
-        /* COUNTDOWN */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 40px 0;
-        }
-        .time-box {
-            background: #fff;
-            padding: 10px;
-            border: 1px solid #ddd;
-            min-width: 60px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .time-val {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: block;
-            color: #333;
-        }
-        .time-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #888;
-        }
-
-        /* VENUE INFO */
-        .venue-section {
-            margin-top: 50px;
-            padding: 30px;
-            border: 1px solid #d4af37;
-            position: relative;
-        }
-        .venue-section::before {
-            content: "❦";
-            font-size: 2rem;
-            background: #f9f4ef;
-            padding: 0 10px;
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #d4af37;
-        }
-        .venue-name {
-            font-weight: bold;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div id="curtain-overlay">
-        <div class="curtain-panel curtain-left"></div>
-        <div class="curtain-panel curtain-right"></div>
-        <div id="enter-btn">Tap to Open</div>
-    </div>
-
-    <div class="container" id="main-content">
-        <p class="subtitle">You are cordially invited to the wedding of</p>
-        <h1>Aneesh <br>&<br> Siddhi</h1>
-        
-        <div class="scratch-section">
-            <p class="scratch-instruction">✨ Scratch circles to reveal the date ✨</p>
-            <div class="scratch-container">
-                <div class="scratch-box">
-                    <div class="scratch-reveal">19</div>
-                    <canvas id="scratch1" width="100" height="100"></canvas>
-                </div>
-                <div class="scratch-box">
-                    <div class="scratch-reveal">Feb</div>
-                    <canvas id="scratch2" width="100" height="100"></canvas>
-                </div>
-                <div class="scratch-box">
-                    <div class="scratch-reveal">2026</div>
-                    <canvas id="scratch3" width="100" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <p style="font-size: 1.2rem; margin-top: 20px;">We're getting married!</p>
-
-        <div class="countdown">
-            <div class="time-box"><span class="time-val" id="days">00</span><span class="time-label">Days</span></div>
-            <div class="time-box"><span class="time-val" id="hours">00</span><span class="time-label">Hours</span></div>
-            <div class="time-box"><span class="time-val" id="mins">00</span><span class="time-label">Mins</span></div>
-            <div class="time-box"><span class="time-val" id="secs">00</span><span class="time-label">Secs</span></div>
-        </div>
-
-        <div class="venue-section">
-            <p>THE CELEBRATION WILL TAKE PLACE AT</p>
-            <div class="venue-name">Vinkar Sabha Gruha</div>
-            <p>Pune, Maharashtra</p>
-            <p>February 19, 2026</p>
-        </div>
-
-        <footer style="margin-top: 50px; font-size: 0.8rem; color: #888;">
-            With Love, Aneesh & Siddhi
-        </footer>
-    </div>
-
-    <script>
-        /* --- JAVASCRIPT LOGIC --- */
-
-        // 1. Curtain Logic
-        const curtainOverlay = document.getElementById('curtain-overlay');
-        const enterBtn = document.getElementById('enter-btn');
-        const mainContent = document.getElementById('main-content');
-
-        enterBtn.addEventListener('click', () => {
-            curtainOverlay.classList.add('curtain-open');
-            enterBtn.style.opacity = '0';
-            setTimeout(() => {
-                mainContent.classList.add('visible');
-            }, 800);
-        });
-
-        // 2. Scratch Card Logic
-        function initScratch(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            
-            // Fill with gold color initially
-            ctx.fillStyle = "#d4af37"; 
-            ctx.beginPath();
-            ctx.arc(50, 50, 50, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Add text hint "?"
-            ctx.fillStyle = "#fff";
-            ctx.font = "30px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("?", 50, 50);
-
-            let isDrawing = false;
-
-            function scratch(x, y) {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(x, y, 15, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // Mouse Events
-            canvas.addEventListener('mousedown', (e) => { isDrawing = true; });
-            canvas.addEventListener('mouseup', (e) => { isDrawing = false; });
-            canvas.addEventListener('mousemove', (e) => {
-                if (!isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                scratch(e.clientX - rect.left, e.clientY - rect.top);
-            });
-
-            // Touch Events (Mobile)
-            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
-            canvas.addEventListener('touchend', (e) => { isDrawing = false; });
-            canvas.addEventListener('touchmove', (e) => {
-                if (!isDrawing) return;
-                e.preventDefault();
-                const rect = canvas.getBoundingClientRect();
-                const touch = e.touches[0];
-                scratch(touch.clientX - rect.left, touch.clientY - rect.top);
-            });
-        }
-
-        // Initialize all 3 scratch cards
-        initScratch('scratch1');
-        initScratch('scratch2');
-        initScratch('scratch3');
-
-        // 3. Countdown Logic
-        // Set the date we're counting down to
-        const countDownDate = new Date("Feb 19, 2026 00:00:00").getTime();
-
-        const x = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
-            document.getElementById("mins").innerText = minutes;
-            document.getElementById("secs").innerText = seconds;
-
-            if (distance < 0) {
-                clearInterval(x);
-                document.querySelector('.countdown').innerHTML = "The Big Day is Here!";
-            }
-        }, 1000);
-    </script>
-</body>
-</html>
